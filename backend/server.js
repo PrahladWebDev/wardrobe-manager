@@ -14,7 +14,7 @@ connectDB();
 const app = express();
 
 // ⚡ CORS SETTINGS
-// Allow:
+// Allows:
 // - Production domain
 // - Local development
 const corsOptions = {
