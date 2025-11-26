@@ -23,13 +23,12 @@ jobs:
           source: "backend/**"
           target: "/var/www/wardrobe/backend"
           overwrite: true
-          rm: false
           strip_components: 1
           exclude: |
             backend/.env
             backend/node_modules/**
 
-      - name: Restart Backend with PM2
+      - name: Install dependencies & Restart Backend with PM2
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
