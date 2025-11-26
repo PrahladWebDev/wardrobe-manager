@@ -35,7 +35,7 @@ const Header = ({ token, setToken }) => {
     <header className="bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg">
       <nav className="container mx-auto flex flex-wrap items-center justify-between py-4 px-4 sm:px-6 lg:px-8 text-white">
         <Link to="/" className="text-2xl font-bold tracking-wide flex items-center gap-2">
-          👕 Wardrobe Managersss
+          👕 Wardrobe Managersssss
         </Link>
         <button
           className="sm:hidden focus:outline-none"
