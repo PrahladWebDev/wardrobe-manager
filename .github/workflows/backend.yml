@@ -2,32 +2,41 @@ name: Deploy Backend
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+    paths:
+      - "backend/**"
 
 jobs:
   backend-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-    - name: Upload backend files
-      uses: appleboy/scp-action@v1
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        source: "backend/*,!backend/.env"
-        target: "/var/www/wardrobe/backend"
-        overwrite: true
+      - name: Upload backend files (without .env)
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "backend/**"
+          target: "/var/www/wardrobe/backend"
+          overwrite: true
+          rm: false
+          strip_components: 1
+          exclude: |
+            backend/.env
+            backend/node_modules/**
 
-    - name: Restart backend
-      uses: appleboy/ssh-action@v1
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          cd /var/www/wardrobe/backend
-          npm install --production
-          pm2 restart wardrobe-backend
+      - name: Restart Backend with PM2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /var/www/wardrobe/backend
+            npm install --production
+            pm2 restart wardrobe-backend || pm2 start server.js --name wardrobe-backend
+            pm2 save
