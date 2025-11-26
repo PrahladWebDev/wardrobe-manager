@@ -1,0 +1,101 @@
+import React, { useState } from "react";
+import axiosInstance from "../utils/axios";
+import { useNavigate } from "react-router-dom";
+
+const Login = ({ setToken }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    try {
+      const response = await axiosInstance.post("/auth/login", {
+        email,
+        password,
+      });
+
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        setToken(response.data.token);
+        navigate("/clothing");
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || "Login failed";
+      setError(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 px-4">
+      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Wardrobe Manager
+        </h2>
+
+        {error && (
+          <p className="text-red-500 text-center text-sm mb-4">{error}</p>
+        )}
+
+        {isLoading && (
+          <p className="text-indigo-600 text-center text-sm mb-4">Logging in...</p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email Address"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none text-gray-700 placeholder-gray-400"
+            required
+            disabled={isLoading}
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none text-gray-700 placeholder-gray-400"
+            required
+            disabled={isLoading}
+          />
+          <button
+            type="submit"
+            className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition duration-300 shadow-md"
+            disabled={isLoading}
+          >
+            {isLoading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="text-center text-gray-600 text-sm mt-6">
+          Don’t have an account?{" "}
+          <button
+            onClick={() => navigate("/register")}
+            className="text-indigo-600 hover:underline font-medium"
+            disabled={isLoading}
+          >
+            Register here
+          </button>
+        </p>
+        <p className="text-center text-gray-600 text-sm mt-2">
+          <button
+            onClick={() => navigate("/forgot-password")}
+            className="text-indigo-600 hover:underline font-medium"
+          >
+            Forgot Password?
+          </button>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
