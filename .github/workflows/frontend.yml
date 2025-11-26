@@ -28,8 +28,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             rm -rf /var/www/wardrobe/frontend/dist/*
+            mkdir -p /var/www/wardrobe/frontend/dist
 
-      - name: Upload new dist folder recursively
+      - name: Upload new dist folder
         uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.HOST }}
@@ -38,3 +39,4 @@ jobs:
           source: "frontend/dist/**"
           target: "/var/www/wardrobe/frontend/dist"
           overwrite: true
+          strip_components: 2
