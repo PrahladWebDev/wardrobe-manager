@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import { FaTshirt, FaList, FaChartBar, FaCloudSun, FaCalendarAlt, FaSignOutAlt, FaSignInAlt, FaUserPlus } from "react-icons/fa";
 import Login from "./components/Login";
-import ForgotPassword from './components/ForgotPassword'; // ← ADD THIS
-import ResetPassword from './components/ResetPassword';   // ← AND THIS
-import EmailVerification from './components/EmailVerification'; // ← AND THIS
+import ForgotPassword from './components/ForgotPassword'; 
+import ResetPassword from './components/ResetPassword';  
+import EmailVerification from './components/EmailVerification';
 import Register from "./components/Register";
 import ClothingList from "./components/ClothingList";
 import AddClothing from "./components/AddClothing";
