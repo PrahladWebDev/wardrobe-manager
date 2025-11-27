@@ -12,7 +12,7 @@ export async function sendEmail({ to, subject, html }) {
 
   try {
     const response = await resend.emails.send({
-      from: "Wardrobe Manager <no-reply@webdevprahlad.site>",
+      from: "Wardrobe Manager <no-reply@prahladsingh.in>",
       to,
       subject,
       html,
